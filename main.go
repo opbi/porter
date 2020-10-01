@@ -1,6 +1,4 @@
-package main
-
-func main() {}
+package porter
 
 func Add(a, b int) int {
 	return a + b
