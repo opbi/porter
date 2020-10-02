@@ -1,4 +1,4 @@
-package main
+package actions
 
 import (
 	"fmt"
@@ -158,7 +158,7 @@ OUTER:
 }
 
 // this function prints the contents of a relative or an absolute directory
-func list(isInfo bool, dir string, options map[string]commando.FlagValue) {
+func List(isInfo bool, dir string, options map[string]commando.FlagValue) {
 
 	// get an absolute directory path
 	var dirPath string
