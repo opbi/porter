@@ -1,51 +1,24 @@
 package main
 
 import (
-	"github.com/opbi/porter/actions"
+	"github.com/opbi/porter/src/actions/init"
 	"github.com/thatisuday/commando"
 )
 
 func main() {
 
-	// configure commando
 	commando.
-		SetExecutableName("tree").
+		SetExecutableName("porter").
 		SetVersion("1.0.1").
-		SetDescription("This tool lists the contents of a directory in tree-like format.\nIt can also display information about files and folders like size, permission and ownership.")
+		SetDescription("the universal config manager to coordinate setup, toolings, ci and secret across repos for easy consistency")
 
-	// configure the root command
 	commando.
-		Register(nil).
-		AddArgument("dir", "local directory path", "./").                                                   // default `./`
-		AddFlag("level,l", "level of depth to travel", commando.Int, 1).                                    // default `1`
-		AddFlag("size", "display size of the each file", commando.Bool, nil).                               // default `false`
-		AddFlag("mode", "display mode of the each file", commando.Bool, nil).                               // default `false`
-		AddFlag("no-color", "ignore colored output", commando.Bool, nil).                                   // default `true`
-		AddFlag("ignore", "ignore directories (separated by comma)", commando.String, ".git,node_modules"). // default `.git,node_modules`
-		SetAction(func(args map[string]commando.ArgValue, flags map[string]commando.FlagValue) {
-			dir := args["dir"].Value
+		Register("init").
+		SetShortDescription("create the config specs of a new component").
+		SetAction(actions.Init)
 
-			// call `list` function
-			actions.List(false, dir, flags)
-		})
-
-	// configure info command
-	commando.
-		Register("info").
-		SetShortDescription("displays detailed information of a directory").
-		SetDescription("This command displays more information about the contents of the directory like size, permission and ownership, etc.").
-		AddArgument("dir", "local directory path", "./").
-		AddFlag("level,l", "level of depth to travel", commando.Int, nil).
-		AddFlag("no-color", "ignore colored output", commando.Bool, nil).                                   // default `true`
-		AddFlag("ignore", "ignore directories (separated by comma)", commando.String, ".git,node_modules"). // default `.git,node_modules`
-		SetAction(func(args map[string]commando.ArgValue, flags map[string]commando.FlagValue) {
-			dir := args["dir"].Value
-
-			// call `list` function
-			actions.List(true, dir, flags)
-		})
-
-	// parse command-line arguments
+	// set input from ENV_VAR to nil
+	// parse only the command-line arguments
 	commando.Parse(nil)
 
 }
